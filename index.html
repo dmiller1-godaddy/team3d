@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thing</title>
+    <link rel="stylesheet" href="site.css" />
+  </head>
+  <body class="container mx-auto dark:text-white dark:bg-gray-800">
+    <header class="text-center my-10">
+      <h1 class="text-5xl">Team3D</h1>
+    </header>
+
+    <form id="form" method="post" class="dark:bg-gray-700 text-center border border-gray-100 dark:border-0 shadow-lg p-6 my-8 flex content-between">
+      <input type="text" name="domain" id="domain" class="bg-transparent border-0 border-b-2 border-blue-300 flex-grow" />
+      <button type="submit" class="ml-4 bg-indigo-700 text-white p-2">Check for domain names!</button>
+    </form>
+
+    <div class="domainResults">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+            <thead class="bg-gray-50 dark:bg-gray-700">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-[80%]">Domain</th>
+                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Price</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Period</th>
+                </tr>
+            </thead>
+            <tbody id="domainTable" class="bg-white divide-y divide-gray-200 dark:bg-gray-600 dark:divide-gray-900">
+            </tbody>
+        </table>
+        <template id="domainTemplate">
+            <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500 dark:text-gray-200"></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-green-500 dark:text-green-200 text-right"></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-200"></td>
+            </tr>
+        </template>
+    </div>
+
+    <script>
+        let form = document.getElementById('form');
+        form.addEventListener('submit', submitText, true);
+      function submitText(event) {
+        event.preventDefault();
+
+        // TODO: fetch to server to get domains, returning something like this
+        let domainRecommendations = {
+          domains: Array.from({length: Math.floor(Math.random() * 100)}, _ => ({
+            available: true,
+            currency: 'USD',
+            definitive: true,
+            domain: faker.internet.domainName(),
+            period: Math.floor(Math.random() * 3) + 1,
+            price: Math.floor(Math.random() * 1000)
+          }))
+        };
+
+        let table = document.getElementById('domainTable');
+        let domainTemplate = document.getElementById('domainTemplate');
+        table.innerHTML = '';
+
+        domainRecommendations.domains.forEach(domain => {
+            let clone = domainTemplate.content.cloneNode(true);
+            let td = clone.querySelectorAll('td');
+            td[0].textContent = domain.domain;
+            td[1].innerHTML = `$${domain.price}<small class="text-gray-300">/yr<small>`;
+            td[2].textContent = domain.period.toString();
+            table.appendChild(clone);
+        });
+      }
+    </script>
+
+    <script src = "faker.min.js" type = "text/javascript"></script>
+  </body>
+</html>
